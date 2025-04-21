@@ -6,9 +6,20 @@ import { useFonts, Poppins_400Regular, Poppins_500Medium, Poppins_700Bold } from
 import { PlayfairDisplay_400Regular, PlayfairDisplay_700Bold } from '@expo-google-fonts/playfair-display';
 import { View, Text, StyleSheet } from 'react-native';
 import { SplashScreen } from 'expo-router';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Link, Tabs } from 'expo-router';
+import { Pressable, useColorScheme } from 'react-native';
+import Colors from '../constants/Colors';
 
 // Prevent splash screen from auto-hiding
 SplashScreen.preventAutoHideAsync();
+
+function TabBarIcon(props: {
+  name: React.ComponentProps<typeof FontAwesome>['name'];
+  color: string;
+}) {
+  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+}
 
 export default function RootLayout() {
   useFrameworkReady();
@@ -31,6 +42,8 @@ export default function RootLayout() {
     return null;
   }
 
+  const colorScheme = useColorScheme();
+
   return (
     <>
       <Stack screenOptions={{ headerShown: false }}>
@@ -38,6 +51,39 @@ export default function RootLayout() {
         <Stack.Screen name="+not-found" options={{ title: 'Not Found' }} />
       </Stack>
       <StatusBar style="auto" />
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        }}>
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: '主页',
+            tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="astrology"
+          options={{
+            title: '占星术',
+            tabBarIcon: ({ color }) => <TabBarIcon name="star" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="purple-star"
+          options={{
+            title: '紫微斗数',
+            tabBarIcon: ({ color }) => <TabBarIcon name="compass" color={color} />,
+          }}
+        />
+        <Tabs.Screen
+          name="relationships"
+          options={{
+            title: '人际关系',
+            tabBarIcon: ({ color }) => <TabBarIcon name="users" color={color} />,
+          }}
+        />
+      </Tabs>
     </>
   );
 }
